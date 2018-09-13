@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Desafio IClips</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="wrapper">
+
+        <!-- Side Nav Bar -->
+        <nav class="sidebar">
+            <ul class="nav flex-column">
+
+             <!-- checks wich menu is currently active, and applying class .active -->
+                @if (ViewBag.Title == "Home Page")
+                {
+                    <li id="liHome" class="active">
+                        <a href="/home"  class="nav-link">
+                            Home
+                            <!-- Badge Counter -->
+                            <span id="badge-nav0" class="badge badge-pill badge-primary">@ViewBag.BadgePeopleCounter</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li id="liEmAndamento" class="">
+                        <a href="/home" class="nav-link">
+                            Home Page
+                            <!-- Badge Counter -->
+                            <span id="badge-nav0" class="badge badge-pill badge-primary">@ViewBag.BadgePeopleCounter</span>
+
+                        </a>
+                    </li>
+                }
+                @if (ViewBag.Title == "Andamento")
+                {
+                     <li id="liEmAndamento" class="active">
+                          <a href="/home/andamento" class="nav-link">
+                                Em andamento
+                                <!-- Badge Counter -->
+                              <span id="badge-nav1" class="badge badge-pill badge-primary">@ViewBag.BadgeAndamentoCounter</span>
+
+                          </a>
+                     </li>
+                }
+                else
+                {
+                    <li id="liEmAndamento" class="">
+                        <a href="/home/andamento" class="nav-link">
+                            Em andamento
+                            <!-- Badge Counter -->
+                            <span id="badge-nav1" class="badge badge-pill badge-primary">@ViewBag.BadgeAndamentoCounter</span>
+
+                        </a>
+                    </li>
+                 }
+
+              @if (ViewBag.Title == "Atrasado")
+              {
+                <li id="liAtrasadas" class="active">
+                    <a href="/home/atrasado" class="nav-link" >
+                        atrasadas
+
+                        <!-- Badge Counter -->
+                        <span id="badge-nav2" class="badge badge-pill badge-danger">@ViewBag.BadgeAtrasadoCounter</span>
+                    </a>
+                </li>
+              }
+              else
+              {
+                <li id="liAtrasadas" class="">
+                    <a href="/home/atrasado" class="nav-link" >
+                        atrasadas
+
+                        <!-- Badge Counter -->
+                        <span id="badge-nav2" class="badge badge-pill badge-danger">@ViewBag.BadgeAtrasadoCounter</span>
+                    </a>
+                </li>
+              }
+
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+            <div id="container" class="main row">
+                 @RenderBody()
+            </div>
+
+        </div>
+
+     
+        <!-- Important Scripts -->
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/script")
+        @RenderSection("scripts", required: false)
+        <script>
+
+        //Order Table Button Event.
+            function orderTable() {
+
+                //Getting Sorted array from HomeController as JsonArray, Method:OrderTable
+                $.post('@Url.Action("OrderTable", "Home")', { Title: '@ViewBag.Title' },
+                function (returnedData) {
+
+                    //Clear Table data
+                    var table = $("#table");
+                    table.empty();
+
+                    //Create table body
+                    var tBody = $("<tbody></tbody>");
+
+                    //Making Rows
+                    $.each(returnedData, function (idx, person) {
+
+                        var openRow = '<tr>';
+                        var td1 = '<td><div class="tableCheckbox"><input type="checkbox"></div>' + person.Nome + '</td>';
+                        var td2 = '<td>' + person.Email + '</td>';
+
+                        if (person.Situacao === 0) {
+                            var td3 = '<td><p class="andamento">Em Andamento</p></td>';
+                        } else {
+                            var td3 = '<td><p class="atrasado">Atrasados</p></td>';
+                        }
+                        var closeRow = '</tr>'
+
+                        //adding rows and td`s to Table Body
+                        tBody.append(openRow+td1+td2+td3+closeRow);
+                    });
+
+                    //Adding tbody to table as a child
+                    table.append(tBody);
+                });
+            }
+        </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+﻿<!-- Main Title -->
+
+<div class="mainTitle">
+    <div class="" id="textTitle"><p id="titleP">@ViewBag.Title</p></div>
+    <div class="" id="btnTitle"><button class="btn btn-default" onclick="orderTable()">Ordenar Lista</button></div>
+</div>
+
+<!--Main Table -->
+
+<div class="mainTable">
+    <table id="table" class="table table-hover table-striped">
+        <tbody>
+            @foreach (var person in ViewBag.People)
+            {
+                <tr>
+                    <td>
+                        <div class="tableCheckbox"><input type="checkbox"></div>
+                        @person.Nome
+                    </td>
+                    <td>
+                        @person.Email
+                    </td>
+                    <td>
+                        @if (person.Situacao == DesafioIClips.Models.EnumSituacao.Atrasado)
+                        {
+                            <p class="atrasado">@person.Situacao</p>
+                        }
+                        else
+                        {
+                            <p class="andamento">Em Andamento</p>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
